@@ -23,4 +23,9 @@ class Boxes {
       print(element.password);
     }
   }
+
+  static List<Activity> getAllActivityValue() {
+    var values = Hive.box<Activity>('activities').values;
+    return values.toList();
+  }
 }

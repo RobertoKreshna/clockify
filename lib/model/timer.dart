@@ -162,14 +162,17 @@ class TimerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveCurrentTimerData(
-      String title, String duration, String lat, String long) {
+  void saveCurrentTimerData(String title, String lat, String long) {
     //add
+    final duration =
+        '${_hour.toString().padLeft(2, "0")} : ${_minute.toString().padLeft(2, "0")} : ${_seconds.toString().padLeft(2, "0")}';
     final newActivity = Activity(
         title, duration, _startDate, _startTime, _endDate, _endTime, long, lat);
     final box = Boxes.getActivityBox();
     box.add(newActivity);
     //reset back the timer
+    _saveAvailable = false;
+    _deleteAvailable = false;
     resetTimer();
   }
 }
