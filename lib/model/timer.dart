@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:core';
 
+import 'package:clocklify/model/activity.dart';
+import 'package:clocklify/model/boxes.dart';
 import 'package:flutter/foundation.dart';
 
 class TimerProvider extends ChangeNotifier {
@@ -160,5 +162,14 @@ class TimerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void saveCurrentTimerData(String title, String duration) {}
+  void saveCurrentTimerData(
+      String title, String duration, String lat, String long) {
+    //add
+    final newActivity = Activity(
+        title, duration, _startDate, _startTime, _endDate, _endTime, long, lat);
+    final box = Boxes.getActivityBox();
+    box.add(newActivity);
+    //reset back the timer
+    resetTimer();
+  }
 }
