@@ -123,10 +123,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    ActivityDetail(activities[index], index)));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        ActivityDetail(
+                                            activities[index], index)))
+                            .then((value) => refreshData());
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -196,6 +198,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
         ),
       ])),
     );
+  }
+
+  void refreshData() {
+    setState(() {});
   }
 
   Widget swipeLeft() {
