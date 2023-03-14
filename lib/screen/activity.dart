@@ -1,6 +1,7 @@
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/screen/home_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 import '../model/activity.dart';
 import '../style/styles.dart';
@@ -110,9 +111,23 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ],
         ),
         Expanded(
-          child: ListView.builder(
-              itemCount: activities.length,
-              itemBuilder: (BuildContext context, int index) {
+          child: GroupedListView<dynamic, String>(
+              elements: activities,
+              groupBy: (element) => element.startDate,
+              groupSeparatorBuilder: (String groupByValue) {
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                  child: Container(
+                    decoration: BoxDecoration(color: Style.timerLocation),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      groupByValue,
+                      style: TextStyle(color: Colors.amber, fontSize: 12),
+                    ),
+                  ),
+                );
+              },
+              indexedItemBuilder: (context, dynamic element, int index) {
                 return Dismissible(
                     direction: DismissDirection.endToStart,
                     key: ObjectKey(this),
@@ -130,12 +145,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                             activities[index], index)))
                             .then((value) => refreshData());
                       },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                bottom:
+                                    BorderSide(color: Style.timerLocation))),
                         child: ListTile(
                           title: Text(
                             activities[index].duration,
-                            style: TextStyle(fontSize: 17, color: Colors.white),
+                            style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                           subtitle: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,14 +166,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         child: Icon(
                                       Icons.timer,
                                       color: Colors.white54,
-                                      size: 15,
+                                      size: 14,
                                     )),
                                     TextSpan(
                                         text:
                                             ' ${activities[index].startTime} - ${activities[index].endTime}',
                                         style: TextStyle(
                                             color: Colors.white54,
-                                            fontSize: 13)),
+                                            fontSize: 12)),
                                   ],
                                 ),
                               ),
@@ -168,7 +186,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               Text(
                                 activities[index].title,
                                 style: TextStyle(
-                                    fontSize: 14, color: Colors.white),
+                                    fontSize: 12, color: Colors.white),
                               ),
                               RichText(
                                 text: TextSpan(
@@ -178,14 +196,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         child: Icon(
                                       Icons.timer,
                                       color: Colors.white54,
-                                      size: 15,
+                                      size: 14,
                                     )),
                                     TextSpan(
                                         text:
                                             ' ${activities[index].startTime} - ${activities[index].endTime}',
                                         style: TextStyle(
                                             color: Colors.white54,
-                                            fontSize: 13)),
+                                            fontSize: 12)),
                                   ],
                                 ),
                               ),
