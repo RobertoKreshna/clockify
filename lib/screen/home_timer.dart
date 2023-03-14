@@ -269,7 +269,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: DecoratedBox(
                             decoration: BoxDecoration(
-                              gradient: Style.buttonColor,
+                              color: Colors.white,
                               borderRadius: BorderRadius.circular(7.5),
                             ),
                             child: ElevatedButton(
@@ -280,7 +280,8 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                               onPressed: () {
                                 timer.deleteCurrentTimerData();
                               },
-                              child: Text('DELETE'),
+                              child: Text('DELETE',
+                                  style: TextStyle(color: Colors.black54)),
                             )),
                       ))
                     : Container(),

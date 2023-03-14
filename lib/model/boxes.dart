@@ -38,4 +38,15 @@ class Boxes {
       return res;
     }
   }
+
+  static UpdateActivity(Activity activity, int index) {
+    final box = Hive.box<Activity>('activities');
+    box.deleteAt(index);
+    box.putAt(index, activity);
+  }
+
+  static deleteActivity(int index) {
+    final box = Hive.box<Activity>('activities');
+    box.deleteAt(index);
+  }
 }

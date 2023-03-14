@@ -126,7 +126,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             context,
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    ActivityDetail()));
+                                    ActivityDetail(activities[index], index)));
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -203,9 +203,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
       alignment: Alignment.centerRight,
       padding: EdgeInsets.symmetric(horizontal: 20),
       color: Colors.red,
-      child: Icon(
-        Icons.delete_outline,
-        color: Colors.white54,
+      child: Text(
+        "DELETE",
+        style: TextStyle(color: Colors.white, fontSize: 14),
       ),
     );
   }
