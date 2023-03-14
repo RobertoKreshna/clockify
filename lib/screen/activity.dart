@@ -13,9 +13,11 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
+  var searchKeyWord = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    activities = Boxes.getAllActivityValue();
+    activities = Boxes.getAllActivityValue(searchKeyWord.text);
     return Scaffold(
       backgroundColor: Style.bgColor,
       body: SafeArea(
@@ -73,51 +75,123 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ),
         ),
         Row(
-          children: [],
+          children: [
+            Expanded(
+                flex: 2,
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                        hintText: "Search Activity",
+                        hintStyle: TextStyle(fontSize: 13),
+                        fillColor: Colors.white,
+                        filled: true,
+                        suffixIcon: Icon(Icons.search)),
+                    controller: searchKeyWord,
+                    onChanged: (value) {
+                      activities = Boxes.getAllActivityValue(value);
+                      setState(() {});
+                    },
+                  ),
+                ))),
+            Expanded(
+                flex: 1,
+                child: Center(
+                    child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      fillColor: Color.fromARGB(255, 67, 75, 140),
+                      filled: true,
+                    ),
+                  ),
+                ))),
+          ],
         ),
         Expanded(
           child: ListView.builder(
               itemCount: activities.length,
               itemBuilder: (BuildContext context, int index) {
                 return Dismissible(
-                  direction: DismissDirection.endToStart,
-                  key: ObjectKey(this),
-                  background: swipeLeft(),
-                  onDismissed: (direction) {
-                    dismissItem(context, direction, index);
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (BuildContext context) =>
-                                  ActivityDetail()));
+                    direction: DismissDirection.endToStart,
+                    key: ObjectKey(this),
+                    background: swipeLeft(),
+                    onDismissed: (direction) {
+                      dismissItem(context, direction, index);
                     },
-                    child: ListTile(
-                      title: Text(
-                        activities[index].title,
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      ),
-                      subtitle: RichText(
-                        text: TextSpan(
-                            text: '',
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    ActivityDetail()));
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          title: Text(
+                            activities[index].duration,
+                            style: TextStyle(fontSize: 17, color: Colors.white),
+                          ),
+                          subtitle: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              WidgetSpan(
-                                  child: Icon(
-                                Icons.timer,
-                                color: Colors.white54,
-                                size: 17,
-                              )),
-                              TextSpan(
-                                  text:
-                                      '  ${activities[index].startTime} - ${activities[index].endTime}'),
+                              RichText(
+                                text: TextSpan(
+                                  text: '',
+                                  children: [
+                                    WidgetSpan(
+                                        child: Icon(
+                                      Icons.timer,
+                                      color: Colors.white54,
+                                      size: 15,
+                                    )),
+                                    TextSpan(
+                                        text:
+                                            ' ${activities[index].startTime} - ${activities[index].endTime}',
+                                        style: TextStyle(
+                                            color: Colors.white54,
+                                            fontSize: 13)),
+                                  ],
+                                ),
+                              ),
                             ],
-                            style: TextStyle(color: Colors.white54)),
+                          ),
+                          trailing: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                activities[index].title,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white),
+                              ),
+                              RichText(
+                                text: TextSpan(
+                                  text: '',
+                                  children: [
+                                    WidgetSpan(
+                                        child: Icon(
+                                      Icons.timer,
+                                      color: Colors.white54,
+                                      size: 15,
+                                    )),
+                                    TextSpan(
+                                        text:
+                                            ' ${activities[index].startTime} - ${activities[index].endTime}',
+                                        style: TextStyle(
+                                            color: Colors.white54,
+                                            fontSize: 13)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                );
+                    ));
               }),
         ),
       ])),

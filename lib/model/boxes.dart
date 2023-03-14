@@ -24,8 +24,18 @@ class Boxes {
     }
   }
 
-  static List<Activity> getAllActivityValue() {
-    var values = Hive.box<Activity>('activities').values;
-    return values.toList();
+  static List<Activity> getAllActivityValue(String searchKeyWord) {
+    if (searchKeyWord == "") {
+      return Hive.box<Activity>('activities').values.toList();
+    } else {
+      List<Activity> res = [];
+      var values = Hive.box<Activity>('activities').values.toList();
+      for (var element in values) {
+        if (element.title.startsWith(searchKeyWord)) {
+          res.add(element);
+        }
+      }
+      return res;
+    }
   }
 }
