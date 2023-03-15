@@ -213,71 +213,76 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                   ActivityDetail(activities[index], index)))
                       .then((value) => refreshData());
                 },
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: Style.timerLocation))),
-                  child: ListTile(
-                    title: Text(
-                      activities[index].duration,
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                    subtitle: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              WidgetSpan(
-                                  child: Icon(
-                                Icons.timer,
-                                color: Colors.white54,
-                                size: 14,
-                              )),
-                              TextSpan(
-                                  text:
-                                      ' ${activities[index].startTime} - ${activities[index].endTime}',
-                                  style: TextStyle(
-                                      color: Colors.white54, fontSize: 12)),
-                            ],
-                          ),
+                child: ListTile(
+                  title: Text(
+                    activities[index].duration,
+                    style: TextStyle(fontSize: 14, color: Colors.white),
+                  ),
+                  subtitle: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            WidgetSpan(
+                                child: Icon(
+                              Icons.timer,
+                              color: Colors.white54,
+                              size: 14,
+                            )),
+                            TextSpan(
+                                text:
+                                    ' ${activities[index].startTime} - ${activities[index].endTime} - ${activities[index].startDate}',
+                                style: TextStyle(
+                                    color: Colors.white54, fontSize: 12)),
+                          ],
                         ),
-                      ],
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          activities[index].title,
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        activities[index].title,
+                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: '',
+                          children: [
+                            WidgetSpan(
+                                child: Icon(
+                              Icons.location_on_outlined,
+                              color: Colors.white54,
+                              size: 14,
+                            )),
+                            TextSpan(
+                                text:
+                                    ' ${activities[index].lat}, ${activities[index].long}',
+                                style: TextStyle(
+                                    color: Colors.white54, fontSize: 12)),
+                          ],
                         ),
-                        RichText(
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              WidgetSpan(
-                                  child: Icon(
-                                Icons.timer,
-                                color: Colors.white54,
-                                size: 14,
-                              )),
-                              TextSpan(
-                                  text:
-                                      ' ${activities[index].startTime} - ${activities[index].endTime}',
-                                  style: TextStyle(
-                                      color: Colors.white54, fontSize: 12)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ));
         },
-        order: GroupedListOrder.ASC,
+        separator: SizedBox.shrink(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30.0),
+            child: Container(
+              decoration: BoxDecoration(
+                  border: BorderDirectional(
+                      bottom: BorderSide(color: Colors.black45))),
+            ),
+          ),
+        ),
+        order: GroupedListOrder.DESC,
       );
     } else if (value == "Nearby") {
       return Container();
