@@ -23,6 +23,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   @override
   Widget build(BuildContext context) {
     activities = Boxes.getAllActivityValue(searchKeyWord.text);
+    length = activities.length;
     return Scaffold(
       backgroundColor: Style.bgColor,
       body: SafeArea(
@@ -202,7 +203,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               key: ObjectKey(this),
               background: swipeLeft(),
               onDismissed: (direction) {
-                dismissItem(context, direction, index);
+                dismissItem(context, direction, length - index);
               },
               child: GestureDetector(
                 onTap: () {
@@ -210,7 +211,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  ActivityDetail(activities[index], index)))
+                                  ActivityDetail(element, length - index)))
                       .then((value) => refreshData());
                 },
                 child: ListTile(
