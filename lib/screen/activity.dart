@@ -1,4 +1,3 @@
-import 'package:clocklify/components/sort_button.dart';
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/screen/home_timer.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,8 @@ import 'package:grouped_list/grouped_list.dart';
 import '../model/activity.dart';
 import '../style/styles.dart';
 import 'activity_detail.dart';
+
+List<String> sortMethods = ['Latest Date', 'Nearby'];
 
 class ActivityScreen extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
   var length;
   var searchKeyWord = TextEditingController();
+  var currentValue = sortMethods.first;
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +112,43 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   child: Center(
                       child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: SortButton(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Style.timerLocation,
+                          borderRadius: BorderRadius.circular(10.0)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                      child: DropdownButton<String>(
+                        value: currentValue,
+                        icon: const Icon(
+                          Icons.arrow_downward,
+                          color: Colors.white,
+                        ),
+                        elevation: 16,
+                        underline: Container(
+                          height: 0,
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        onChanged: (String? value) {
+                          currentValue = value!;
+                          refreshData();
+                        },
+                        items: sortMethods
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        dropdownColor: Style.timerLocation,
+                      ),
+                    ),
                   ))),
             ],
           ),
         ),
         Expanded(
-          child: getActivity(SortButton().getValue()),
+          child: getActivity(currentValue),
         ),
       ])),
     );
