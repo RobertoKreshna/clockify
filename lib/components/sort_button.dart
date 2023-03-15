@@ -6,6 +6,10 @@ List<String> sortMethods = ['Latest Date', 'Nearby'];
 class SortButton extends StatefulWidget {
   @override
   State<SortButton> createState() => _SortButtonState();
+
+  String getValue() {
+    return _SortButtonState().currentValue;
+  }
 }
 
 class _SortButtonState extends State<SortButton> {
