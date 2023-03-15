@@ -1,3 +1,4 @@
+import 'package:clocklify/components/sort_button.dart';
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/screen/home_timer.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +15,7 @@ class ActivityScreen extends StatefulWidget {
 
 class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
+  var length;
   var searchKeyWord = TextEditingController();
 
   @override
@@ -75,144 +77,145 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ),
           ),
         ),
-        Row(
-          children: [
-            Expanded(
-                flex: 2,
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                        hintText: "Search Activity",
-                        hintStyle: TextStyle(fontSize: 13),
-                        fillColor: Colors.white,
-                        filled: true,
-                        suffixIcon: Icon(Icons.search)),
-                    controller: searchKeyWord,
-                    onChanged: (value) {
-                      activities = Boxes.getAllActivityValue(value);
-                      setState(() {});
-                    },
-                  ),
-                ))),
-            Expanded(
-                flex: 1,
-                child: Center(
-                    child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      fillColor: Color.fromARGB(255, 67, 75, 140),
-                      filled: true,
+        Padding(
+          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 30.0),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10.0)),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: "Search Activity",
+                          hintStyle: TextStyle(fontSize: 13),
+                          suffixIcon: Icon(Icons.search),
+                        ),
+                        controller: searchKeyWord,
+                        onChanged: (value) {
+                          activities = Boxes.getAllActivityValue(value);
+                          setState(() {});
+                        },
+                      ),
                     ),
-                  ),
-                ))),
-          ],
+                  )),
+              Expanded(
+                  flex: 1,
+                  child: Center(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: SortButton(),
+                  ))),
+            ],
+          ),
         ),
         Expanded(
           child: GroupedListView<dynamic, String>(
-              elements: activities,
-              groupBy: (element) => element.startDate,
-              groupSeparatorBuilder: (String groupByValue) {
-                return Padding(
-                  padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
-                  child: Container(
-                    decoration: BoxDecoration(color: Style.timerLocation),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text(
-                      groupByValue,
-                      style: TextStyle(color: Colors.amber, fontSize: 12),
-                    ),
+            elements: activities,
+            groupBy: (element) => element.startDate,
+            groupSeparatorBuilder: (String groupByValue) {
+              return Container(
+                decoration: BoxDecoration(color: Style.timerLocation),
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Text(
+                    groupByValue,
+                    style: TextStyle(color: Colors.amber, fontSize: 12),
                   ),
-                );
-              },
-              indexedItemBuilder: (context, dynamic element, int index) {
-                return Dismissible(
-                    direction: DismissDirection.endToStart,
-                    key: ObjectKey(this),
-                    background: swipeLeft(),
-                    onDismissed: (direction) {
-                      dismissItem(context, direction, index);
+                ),
+              );
+            },
+            indexedItemBuilder: (context, dynamic element, int index) {
+              return Dismissible(
+                  direction: DismissDirection.endToStart,
+                  key: ObjectKey(this),
+                  background: swipeLeft(),
+                  onDismissed: (direction) {
+                    dismissItem(context, direction, index);
+                  },
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ActivityDetail(activities[index], index)))
+                          .then((value) => refreshData());
                     },
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        ActivityDetail(
-                                            activities[index], index)))
-                            .then((value) => refreshData());
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom:
-                                    BorderSide(color: Style.timerLocation))),
-                        child: ListTile(
-                          title: Text(
-                            activities[index].duration,
-                            style: TextStyle(fontSize: 14, color: Colors.white),
-                          ),
-                          subtitle: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: '',
-                                  children: [
-                                    WidgetSpan(
-                                        child: Icon(
-                                      Icons.timer,
-                                      color: Colors.white54,
-                                      size: 14,
-                                    )),
-                                    TextSpan(
-                                        text:
-                                            ' ${activities[index].startTime} - ${activities[index].endTime}',
-                                        style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 12)),
-                                  ],
-                                ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border(
+                              bottom: BorderSide(color: Style.timerLocation))),
+                      child: ListTile(
+                        title: Text(
+                          activities[index].duration,
+                          style: TextStyle(fontSize: 14, color: Colors.white),
+                        ),
+                        subtitle: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                children: [
+                                  WidgetSpan(
+                                      child: Icon(
+                                    Icons.timer,
+                                    color: Colors.white54,
+                                    size: 14,
+                                  )),
+                                  TextSpan(
+                                      text:
+                                          ' ${activities[index].startTime} - ${activities[index].endTime}',
+                                      style: TextStyle(
+                                          color: Colors.white54, fontSize: 12)),
+                                ],
                               ),
-                            ],
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                activities[index].title,
-                                style: TextStyle(
-                                    fontSize: 12, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        trailing: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              activities[index].title,
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.white),
+                            ),
+                            RichText(
+                              text: TextSpan(
+                                text: '',
+                                children: [
+                                  WidgetSpan(
+                                      child: Icon(
+                                    Icons.timer,
+                                    color: Colors.white54,
+                                    size: 14,
+                                  )),
+                                  TextSpan(
+                                      text:
+                                          ' ${activities[index].startTime} - ${activities[index].endTime}',
+                                      style: TextStyle(
+                                          color: Colors.white54, fontSize: 12)),
+                                ],
                               ),
-                              RichText(
-                                text: TextSpan(
-                                  text: '',
-                                  children: [
-                                    WidgetSpan(
-                                        child: Icon(
-                                      Icons.timer,
-                                      color: Colors.white54,
-                                      size: 14,
-                                    )),
-                                    TextSpan(
-                                        text:
-                                            ' ${activities[index].startTime} - ${activities[index].endTime}',
-                                        style: TextStyle(
-                                            color: Colors.white54,
-                                            fontSize: 12)),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ));
-              }),
+                    ),
+                  ));
+            },
+            order: GroupedListOrder.ASC,
+          ),
         ),
       ])),
     );
