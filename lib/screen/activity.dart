@@ -215,7 +215,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 },
                 child: ListTile(
                   title: Text(
-                    activities[index].duration,
+                    element.duration,
                     style: TextStyle(fontSize: 14, color: Colors.white),
                   ),
                   subtitle: Row(
@@ -233,7 +233,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             )),
                             TextSpan(
                                 text:
-                                    ' ${activities[index].startTime} - ${activities[index].endTime} - ${activities[index].startDate}',
+                                    ' ${element.startTime} - ${element.endTime} - ${element.startDate}',
                                 style: TextStyle(
                                     color: Colors.white54, fontSize: 12)),
                           ],
@@ -246,7 +246,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        activities[index].title,
+                        element.title,
                         style: TextStyle(fontSize: 12, color: Colors.white),
                       ),
                       RichText(
@@ -260,8 +260,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               size: 14,
                             )),
                             TextSpan(
-                                text:
-                                    ' ${activities[index].lat}, ${activities[index].long}',
+                                text: ' ${element.lat}, ${element.long}',
                                 style: TextStyle(
                                     color: Colors.white54, fontSize: 12)),
                           ],
