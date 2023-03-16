@@ -305,7 +305,15 @@ class _ActivityScreenState extends State<ActivityScreen> {
         for (var i = 0; i < distances.length; i++)
           Tuple2(distances[i], activities[i]),
       ];
-      combined.sort((tuple1, tuple2) => tuple1.item1.compareTo(tuple2.item1));
+      combined.sort((tuple1, tuple2) {
+        if (tuple1.item1 != tuple2.item1) {
+          return tuple1.item1.compareTo(tuple2.item1);
+        } else {
+          var startDate1 = tuple1.item2.startDate.substring(0, 2);
+          var startDate2 = tuple2.item2.startDate.substring(0, 2);
+          return int.parse(startDate2).compareTo(int.parse(startDate1));
+        }
+      });
       var sortedActivity = [];
       for (var i = 0; i < combined.length; i++) {
         sortedActivity.add(combined[i].item2);
@@ -357,7 +365,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                               )),
                               TextSpan(
                                   text:
-                                      ' ${sortedActivity[index].startTime} - ${sortedActivity[index].endTime} - ${sortedActivity[index].startDate}',
+                                      ' ${sortedActivity[index].startTime} - ${sortedActivity[index].endTime}}',
                                   style: TextStyle(
                                       color: Colors.white54, fontSize: 12)),
                             ],
