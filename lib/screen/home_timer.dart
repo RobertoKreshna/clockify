@@ -149,12 +149,24 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
             ),
           );
         }),
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 100),
-          decoration: BoxDecoration(color: Style.timerLocation),
-          child: Text(
-            '$lat , $long',
-            style: TextStyle(color: Colors.white),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 75),
+          child: ListTile(
+            tileColor: Style.timerLocation,
+            leading: Icon(
+              Icons.location_on_outlined,
+              color: Colors.amber,
+              size: 30,
+            ),
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${lat}, ${long}',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(

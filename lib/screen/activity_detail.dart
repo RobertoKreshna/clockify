@@ -110,15 +110,22 @@ class ActivityDetail extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                decoration: BoxDecoration(
-                  color: Style.timerLocation,
+              padding: const EdgeInsets.symmetric(horizontal: 75),
+              child: ListTile(
+                tileColor: Style.timerLocation,
+                leading: Icon(
+                  Icons.location_on_outlined,
+                  color: Colors.amber,
+                  size: 30,
                 ),
-                child: Text(
-                  '${activity.lat} , ${activity.long}',
-                  style: TextStyle(color: Colors.white),
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '${activity.lat}, ${activity.long}',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
                 ),
               ),
             ),
