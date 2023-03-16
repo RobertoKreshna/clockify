@@ -152,6 +152,9 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 75),
           child: ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
             tileColor: Style.timerLocation,
             leading: Icon(
               Icons.location_on_outlined,
