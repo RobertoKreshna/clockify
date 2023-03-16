@@ -165,7 +165,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 20.0),
+                  padding: const EdgeInsets.only(right: 10.0),
                   child: Text(
                     '${lat}, ${long}',
                     style: TextStyle(color: Colors.white),
