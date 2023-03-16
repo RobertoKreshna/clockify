@@ -70,7 +70,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                         context,
                         MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                ActivityScreen()));
+                                ActivityScreen(lat, long)));
                   },
                   child: Text(
                     'ACTIVITY',
@@ -306,9 +306,10 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
       } else {
         position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        long = position.longitude.toString();
-        lat = position.latitude.toString();
-        setState(() {});
+        setState(() {
+          long = position.longitude.toString();
+          lat = position.latitude.toString();
+        });
       }
     } else {
       long = "no gps";

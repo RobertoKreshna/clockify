@@ -1,7 +1,9 @@
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/screen/home_timer.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:tuple/tuple.dart';
 
 import '../model/activity.dart';
 import '../style/styles.dart';
@@ -10,8 +12,10 @@ import 'activity_detail.dart';
 List<String> sortMethods = ['Latest Date', 'Nearby'];
 
 class ActivityScreen extends StatefulWidget {
+  var lat, long;
+  ActivityScreen(this.lat, this.long);
   @override
-  State<ActivityScreen> createState() => _ActivityScreenState();
+  State<ActivityScreen> createState() => _ActivityScreenState(lat, long);
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
@@ -19,6 +23,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
   var length;
   var searchKeyWord = TextEditingController();
   var currentValue = sortMethods.first;
+  var currentLat, currentLong;
+
+  _ActivityScreenState(this.currentLat, this.currentLong);
 
   @override
   Widget build(BuildContext context) {
@@ -285,9 +292,120 @@ class _ActivityScreenState extends State<ActivityScreen> {
         order: GroupedListOrder.DESC,
       );
     } else if (value == "Nearby") {
-      return Container();
+      List<double> distances = [];
+      for (var element in activities) {
+        var result = calculateDistance(
+            double.parse(currentLat),
+            double.parse(currentLong),
+            double.parse(element.lat),
+            double.parse(element.long));
+        distances.add(result);
+      }
+      var combined = <Tuple2<double, dynamic>>[
+        for (var i = 0; i < distances.length; i++)
+          Tuple2(distances[i], activities[i]),
+      ];
+      combined.sort((tuple1, tuple2) => tuple1.item1.compareTo(tuple2.item1));
+      var sortedActivity = [];
+      for (var i = 0; i < combined.length; i++) {
+        sortedActivity.add(combined[i].item2);
+      }
+      return ListView.builder(
+        itemCount: sortedActivity.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Dismissible(
+              direction: DismissDirection.endToStart,
+              key: ObjectKey(this),
+              background: swipeLeft(),
+              onDismissed: (direction) {
+                dismissItem(context, direction, length - index);
+              },
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
+                    color: Style.timerLocation,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Text(
+                            sortedActivity[index].startDate,
+                            style: TextStyle(color: Colors.amber, fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      sortedActivity[index].duration,
+                      style: TextStyle(fontSize: 14, color: Colors.white),
+                    ),
+                    subtitle: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: '',
+                            children: [
+                              WidgetSpan(
+                                  child: Icon(
+                                Icons.timer,
+                                color: Colors.white54,
+                                size: 14,
+                              )),
+                              TextSpan(
+                                  text:
+                                      ' ${sortedActivity[index].startTime} - ${sortedActivity[index].endTime} - ${sortedActivity[index].startDate}',
+                                  style: TextStyle(
+                                      color: Colors.white54, fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          sortedActivity[index].title,
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        ),
+                        RichText(
+                          text: TextSpan(
+                            text: '',
+                            children: [
+                              WidgetSpan(
+                                  child: Icon(
+                                Icons.location_on_outlined,
+                                color: Colors.white54,
+                                size: 14,
+                              )),
+                              TextSpan(
+                                  text:
+                                      ' ${sortedActivity[index].lat}, ${sortedActivity[index].long}',
+                                  style: TextStyle(
+                                      color: Colors.white54, fontSize: 12)),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ));
+        },
+      );
     } else {
       return Container();
     }
+  }
+
+  double calculateDistance(double currentLat, double currentLong,
+      double elementLat, double elementLong) {
+    return Geolocator.distanceBetween(
+        currentLat, currentLong, elementLat, elementLong);
   }
 }
