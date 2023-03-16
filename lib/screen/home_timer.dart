@@ -157,7 +157,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
             ),
             tileColor: Style.timerLocation,
             leading: Icon(
-              Icons.location_on_outlined,
+              Icons.location_on,
               color: Colors.amber,
               size: 30,
             ),
