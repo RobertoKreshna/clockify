@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/model/user.dart';
+import 'package:clocklify/screen/mainpage_bar.dart';
 import 'package:flutter/material.dart';
 import 'home_timer.dart';
 import 'login.dart';
@@ -152,7 +153,7 @@ class _CreateAccountPage extends State<CreateAccountPage> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (BuildContext context) =>
-                                              HomeTimerPage())));
+                                              MainPageBar())));
                             }
                           },
                           child: Text('CREATE'),

@@ -2,7 +2,9 @@ import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/provider/search_provider.dart';
 import 'package:clocklify/provider/sort_provider.dart';
 import 'package:clocklify/screen/home_timer.dart';
+import 'package:clocklify/utils/geolocation.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 import '../model/activity.dart';
@@ -11,22 +13,23 @@ import '../style/styles.dart';
 List<String> sortMethods = ['Latest Date', 'Nearby'];
 
 class ActivityScreen extends StatefulWidget {
-  var lat, long;
-  ActivityScreen(this.lat, this.long);
   @override
-  State<ActivityScreen> createState() => _ActivityScreenState(lat, long);
+  State<ActivityScreen> createState() => _ActivityScreenState();
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
-  var length;
-  var searchKeyWord = TextEditingController();
-  var currentLat, currentLong, sort;
 
-  _ActivityScreenState(this.currentLat, this.currentLong);
+  bool servicestatus = false;
+  late LocationPermission permission;
+  late Position position;
+
+  var length, sort, lat = "", long = "";
+  var searchKeyWord = TextEditingController();
 
   @override
   void initState() {
+    getLocation();
     super.initState();
     sort = Provider.of<SortProvider>(context, listen: false);
   }
@@ -39,60 +42,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
       backgroundColor: Style.bgColor,
       body: SafeArea(
           child: Column(children: [
-        Center(
-          child: Container(
-            width: 200,
-            child: Image(image: AssetImage("assets/images/Logo.png")),
-          ),
-        ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
-          child: Container(
-            child: Row(
-              children: [
-                Expanded(
-                    child: Center(
-                        child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                HomeTimerPage()));
-                  },
-                  child: Text(
-                    'TIMER',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 17,
-                    ),
-                  ),
-                ))),
-                Expanded(
-                    child: Center(
-                        child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: Colors.amber, width: 2))),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    child: Text(
-                      'ACTIVITY',
-                      style: TextStyle(
-                        color: Colors.amber,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ))),
-              ],
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 30.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0),
           child: Row(
             children: [
               Expanded(
@@ -169,12 +120,35 @@ class _ActivityScreenState extends State<ActivityScreen> {
           builder: (context, sort, search, child) {
             activities = Boxes.getAllActivityValue(search.values);
             return Expanded(
-              child: SortProvider().sortActivity(
-                  activities, sort.value, currentLat, currentLong),
+              child: SortProvider()
+                  .sortActivity(activities, sort.value, lat, long),
             );
           },
         ),
       ])),
     );
+  }
+
+  void getLocation() async {
+    servicestatus = await Geolocator.isLocationServiceEnabled();
+    if (servicestatus) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        long = "permissions are";
+        lat = "denied";
+      } else if (permission == LocationPermission.deniedForever) {
+        long = "permissions are";
+        lat = "permanently denied";
+      } else {
+        position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        lat = position.latitude.toString();
+        long = position.longitude.toString();
+        setState(() {});
+      }
+    } else {
+      long = "no gps";
+      lat = "service";
+    }
   }
 }

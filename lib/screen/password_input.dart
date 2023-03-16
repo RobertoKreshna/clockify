@@ -1,3 +1,4 @@
+import 'package:clocklify/screen/mainpage_bar.dart';
 import 'package:flutter/material.dart';
 import '../model/boxes.dart';
 import '../model/user.dart';
@@ -97,7 +98,7 @@ class _PasswordInputPageState extends State<PasswordInputPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          HomeTimerPage()));
+                                          MainPageBar()));
                             } else {
                               // kalau gagal
                               Navigator.pop(context);

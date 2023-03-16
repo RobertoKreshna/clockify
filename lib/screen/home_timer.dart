@@ -1,6 +1,7 @@
 import 'package:clocklify/model/timer.dart';
 import 'package:clocklify/screen/activity.dart';
 import 'package:clocklify/style/styles.dart';
+import 'package:clocklify/utils/geolocation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,17 +12,16 @@ class HomeTimerPage extends StatefulWidget {
 }
 
 class _HomeTimerPageState extends State<HomeTimerPage> {
-  var timer;
+  var timer, lat, long;
   bool servicestatus = false;
   late LocationPermission permission;
   late Position position;
-  String long = "", lat = "";
   late String duration;
   var title = TextEditingController();
 
   @override
   void initState() {
-    checkLocation();
+    getLocation();
     timer = Provider.of<TimerProvider>(context, listen: false);
     super.initState();
   }
@@ -32,58 +32,6 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
       backgroundColor: Style.bgColor,
       body: SafeArea(
           child: Column(children: [
-        Center(
-          child: Container(
-            width: 200,
-            child: Image(image: AssetImage("assets/images/Logo.png")),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 30.0),
-          child: Container(
-            child: Row(
-              children: [
-                Expanded(
-                    child: Center(
-                        child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(color: Colors.amber, width: 2))),
-                  child: TextButton(
-                    onPressed: () {
-                      setState(() {});
-                    },
-                    child: Text(
-                      'TIMER',
-                      style: TextStyle(
-                        color: Colors.amber,
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
-                ))),
-                Expanded(
-                    child: Center(
-                        child: TextButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                ActivityScreen(lat, long)));
-                  },
-                  child: Text(
-                    'ACTIVITY',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 17,
-                    ),
-                  ),
-                ))),
-              ],
-            ),
-          ),
-        ),
         Spacer(),
         Consumer<TimerProvider>(builder: (context, value, child) {
           return Container(
@@ -209,6 +157,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   shadowColor: Colors.transparent),
                               onPressed: () {
                                 timer.startTimer();
+                                title.clear();
                               },
                               child: Text('START'),
                             )),
@@ -230,8 +179,9 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   shadowColor: Colors.transparent),
                               onPressed: () {
                                 timer.stopTimer();
+                                title.clear();
                               },
-                              child: Text('STOP'),
+                              child: Text('SAVE'),
                             )),
                       ))
                     : Container(),
@@ -312,10 +262,10 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
     );
   }
 
-  void checkLocation() async {
+  void getLocation() async {
     servicestatus = await Geolocator.isLocationServiceEnabled();
     if (servicestatus) {
-      permission = await Geolocator.requestPermission(); //baru minta
+      permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         long = "permissions are";
         lat = "denied";
@@ -325,10 +275,9 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
       } else {
         position = await Geolocator.getCurrentPosition(
             desiredAccuracy: LocationAccuracy.high);
-        setState(() {
-          long = position.longitude.toString();
-          lat = position.latitude.toString();
-        });
+        lat = position.latitude.toString();
+        long = position.longitude.toString();
+        setState(() {});
       }
     } else {
       long = "no gps";
