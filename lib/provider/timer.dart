@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:clocklify/model/activity.dart';
-import 'package:clocklify/model/boxes.dart';
+import 'package:clocklify/provider/boxes.dart';
+import 'package:clocklify/utils/date.dart';
 import 'package:flutter/foundation.dart';
-
-import '../utils/date.dart';
 
 class TimerProvider extends ChangeNotifier {
   late Timer _timer;
@@ -34,49 +33,6 @@ class TimerProvider extends ChangeNotifier {
   bool get resetAvail => _resetAvailable;
   bool get saveAvail => _saveAvailable;
   bool get deleteAvail => _deleteAvailable;
-
-  String getMonth(int month) {
-    String res = "";
-    switch (month) {
-      case 1:
-        res = "Jan";
-        break;
-      case 2:
-        res = "Feb";
-        break;
-      case 3:
-        res = "Mar";
-        break;
-      case 4:
-        res = "Apr";
-        break;
-      case 5:
-        res = "May";
-        break;
-      case 6:
-        res = "Jun";
-        break;
-      case 7:
-        res = "Jul";
-        break;
-      case 8:
-        res = "Aug";
-        break;
-      case 9:
-        res = "Sep";
-        break;
-      case 10:
-        res = "Oct";
-        break;
-      case 11:
-        res = "Nov";
-        break;
-      case 12:
-        res = "Des";
-        break;
-    }
-    return res;
-  }
 
   void setStart() {
     _startTime = Time.getCurrentTime();

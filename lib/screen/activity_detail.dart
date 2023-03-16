@@ -1,5 +1,6 @@
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/model/timer.dart';
+import 'package:clocklify/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -46,7 +47,7 @@ class ActivityDetail extends StatelessWidget {
             Consumer<TimerProvider>(
               builder: (context, value, child) {
                 return Text(
-                  value.getCurrentDate(),
+                  Time.getCurrentDate(),
                   style: TextStyle(color: Colors.amber, fontSize: 16),
                 );
               },
