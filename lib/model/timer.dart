@@ -37,7 +37,7 @@ class TimerProvider extends ChangeNotifier {
     String time = "";
     DateTime _today = DateTime.now();
     time =
-        "${_today.hour.toString().padLeft(2, '0')} ${_today.minute.toString().padLeft(2, '0')} ${_today.second.toString().padLeft(2, '0')}";
+        "${_today.hour.toString().padLeft(2, '0')} : ${_today.minute.toString().padLeft(2, '0')} : ${_today.second.toString().padLeft(2, '0')}";
     return time;
   }
 
