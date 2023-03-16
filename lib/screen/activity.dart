@@ -1,4 +1,5 @@
 import 'package:clocklify/model/boxes.dart';
+import 'package:clocklify/provider/search_provider.dart';
 import 'package:clocklify/provider/sort_provider.dart';
 import 'package:clocklify/screen/home_timer.dart';
 import 'package:flutter/material.dart';
@@ -104,16 +105,19 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           borderRadius: BorderRadius.circular(10.0)),
                       padding:
                           EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Search Activity",
-                          hintStyle: TextStyle(fontSize: 13),
-                          suffixIcon: Icon(Icons.search),
-                        ),
-                        controller: searchKeyWord,
-                        onChanged: (value) {
-                          activities = Boxes.getAllActivityValue(value);
-                          setState(() {});
+                      child: Consumer<SearchProvider>(
+                        builder: (context, search, child) {
+                          return TextField(
+                            decoration: InputDecoration(
+                              hintText: "Search Activity",
+                              hintStyle: TextStyle(fontSize: 13),
+                              suffixIcon: Icon(Icons.search),
+                            ),
+                            controller: searchKeyWord,
+                            onChanged: (value) {
+                              search.setValue(value);
+                            },
+                          );
                         },
                       ),
                     ),
@@ -161,11 +165,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ],
           ),
         ),
-        Consumer<SortProvider>(
-          builder: (context, value, child) {
+        Consumer2<SortProvider, SearchProvider>(
+          builder: (context, sort, search, child) {
+            activities = Boxes.getAllActivityValue(search.values);
             return Expanded(
               child: SortProvider().sortActivity(
-                  activities, value.value, currentLat, currentLong),
+                  activities, sort.value, currentLat, currentLong),
             );
           },
         ),

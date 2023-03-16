@@ -1,4 +1,5 @@
 import 'package:clocklify/model/timer.dart';
+import 'package:clocklify/provider/search_provider.dart';
 import 'package:clocklify/provider/sort_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<TimerProvider>(create: (_) => TimerProvider()),
-        ChangeNotifierProvider<SortProvider>(create: (_) => SortProvider())
+        ChangeNotifierProvider<SortProvider>(create: (_) => SortProvider()),
+        ChangeNotifierProvider<SearchProvider>(create: (_) => SearchProvider()),
       ],
       child: MaterialApp(
         home: LoginPage(),
