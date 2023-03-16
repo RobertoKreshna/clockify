@@ -235,7 +235,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             )),
                             TextSpan(
                                 text:
-                                    ' ${element.startTime} - ${element.endTime} - ${element.startDate}',
+                                    ' ${element.startTime} - ${element.endTime}',
                                 style: TextStyle(
                                     color: Colors.white54, fontSize: 12)),
                           ],
