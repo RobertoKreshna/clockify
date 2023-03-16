@@ -258,6 +258,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                               onPressed: () {
                                 timer.saveCurrentTimerData(
                                     title.text, lat, long);
+                                title.clear();
                               },
                               child: Text('SAVE'),
                             )),

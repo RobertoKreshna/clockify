@@ -178,12 +178,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  void dismissItem(
-      BuildContext context, DismissDirection direction, int index) {
-    var box = Boxes.getActivityBox();
-    box.delete(index);
-  }
-
   Widget getActivity(String value) {
     if (value == "Latest Date") {
       return GroupedListView<dynamic, String>(
@@ -210,7 +204,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               key: ObjectKey(this),
               background: swipeLeft(),
               onDismissed: (direction) {
-                dismissItem(context, direction, length - index);
+                Boxes.deleteActivity(length - index - 1);
               },
               child: GestureDetector(
                 onTap: () {
@@ -218,7 +212,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  ActivityDetail(element, length - index)))
+                                  ActivityDetail(element, length - index - 1)))
                       .then((value) => refreshData());
                 },
                 child: ListTile(
@@ -326,7 +320,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               key: ObjectKey(this),
               background: swipeLeft(),
               onDismissed: (direction) {
-                dismissItem(context, direction, length - index);
+                Boxes.deleteActivity(length - index - 1);
               },
               child: Column(
                 children: [
@@ -345,61 +339,73 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ],
                     ),
                   ),
-                  ListTile(
-                    title: Text(
-                      sortedActivity[index].duration,
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                    subtitle: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              WidgetSpan(
-                                  child: Icon(
-                                Icons.timer,
-                                color: Colors.white54,
-                                size: 14,
-                              )),
-                              TextSpan(
-                                  text:
-                                      ' ${sortedActivity[index].startTime} - ${sortedActivity[index].endTime}}',
-                                  style: TextStyle(
-                                      color: Colors.white54, fontSize: 12)),
-                            ],
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => ActivityDetail(
+                                  sortedActivity[index],
+                                  length -
+                                      index -
+                                      1))).then((value) => refreshData());
+                    },
+                    child: ListTile(
+                      title: Text(
+                        sortedActivity[index].duration,
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                      subtitle: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: '',
+                              children: [
+                                WidgetSpan(
+                                    child: Icon(
+                                  Icons.timer,
+                                  color: Colors.white54,
+                                  size: 14,
+                                )),
+                                TextSpan(
+                                    text:
+                                        ' ${sortedActivity[index].startTime} - ${sortedActivity[index].endTime}}',
+                                    style: TextStyle(
+                                        color: Colors.white54, fontSize: 12)),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          sortedActivity[index].title,
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: '',
-                            children: [
-                              WidgetSpan(
-                                  child: Icon(
-                                Icons.location_on_outlined,
-                                color: Colors.white54,
-                                size: 14,
-                              )),
-                              TextSpan(
-                                  text:
-                                      ' ${sortedActivity[index].lat}, ${sortedActivity[index].long}',
-                                  style: TextStyle(
-                                      color: Colors.white54, fontSize: 12)),
-                            ],
+                        ],
+                      ),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            sortedActivity[index].title,
+                            style: TextStyle(fontSize: 12, color: Colors.white),
                           ),
-                        ),
-                      ],
+                          RichText(
+                            text: TextSpan(
+                              text: '',
+                              children: [
+                                WidgetSpan(
+                                    child: Icon(
+                                  Icons.location_on_outlined,
+                                  color: Colors.white54,
+                                  size: 14,
+                                )),
+                                TextSpan(
+                                    text:
+                                        ' ${sortedActivity[index].lat}, ${sortedActivity[index].long}',
+                                    style: TextStyle(
+                                        color: Colors.white54, fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
