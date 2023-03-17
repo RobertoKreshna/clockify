@@ -2,6 +2,7 @@ import 'package:clocklify/model/timer.dart';
 import 'package:clocklify/screen/activity.dart';
 import 'package:clocklify/style/styles.dart';
 import 'package:clocklify/provider/location_provider.dart';
+import 'package:clocklify/utils/component.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
@@ -136,120 +137,34 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
             child: Row(
               children: [
                 value.startAvail != false
-                    ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: Style.buttonColor,
-                              borderRadius: BorderRadius.circular(7.5),
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                  onSurface: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: () {
-                                value.startTimer();
-                                title.clear();
-                              },
-                              child: Text('START'),
-                            )),
-                      ))
+                    ? Component.blueButton('START', () {
+                        value.startTimer();
+                      })
                     : Container(),
                 value.stopAvail != false
-                    ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: Style.buttonColor,
-                              borderRadius: BorderRadius.circular(7.5),
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                  onSurface: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: () {
-                                value.stopTimer();
-                                title.clear();
-                              },
-                              child: Text('STOP'),
-                            )),
-                      ))
+                    ? Component.blueButton('STOP', () {
+                        value.stopTimer();
+                      })
                     : Container(),
                 value.resetAvail != false
-                    ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(7.5),
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                  onSurface: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: () {
-                                value.resetTimer();
-                              },
-                              child: Text(
-                                'RESET',
-                                style: TextStyle(color: Colors.black54),
-                              ),
-                            )),
-                      ))
+                    ? Component.greyButton('RESET', () {
+                        value.resetTimer();
+                        title.clear();
+                      })
                     : Container(),
                 value.saveAvail != false
-                    ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              gradient: Style.buttonColor,
-                              borderRadius: BorderRadius.circular(7.5),
-                            ),
-                            child: Consumer<GeoLocator>(
-                                builder: (context, location, child) {
-                              return ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.transparent,
-                                    onSurface: Colors.transparent,
-                                    shadowColor: Colors.transparent),
-                                onPressed: () {
-                                  value.saveCurrentTimerData(
-                                      title.text, location.lat, location.long);
-                                  title.clear();
-                                },
-                                child: Text('SAVE'),
-                              );
-                            })),
-                      ))
+                    ? Consumer<GeoLocator>(builder: (context, location, child) {
+                        return Component.blueButton('SAVE', () {
+                          value.saveCurrentTimerData(
+                              title.text, location.lat, location.long);
+                          title.clear();
+                        });
+                      })
                     : Container(),
                 value.deleteAvail != false
-                    ? Expanded(
-                        child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(7.5),
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                  onSurface: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: () {
-                                value.deleteCurrentTimerData();
-                              },
-                              child: Text('DELETE',
-                                  style: TextStyle(color: Colors.black54)),
-                            )),
-                      ))
+                    ? Component.greyButton('DELETE', () {
+                        value.deleteCurrentTimerData();
+                      })
                     : Container(),
               ],
             ),
