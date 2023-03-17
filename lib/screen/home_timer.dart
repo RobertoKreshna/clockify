@@ -12,19 +12,8 @@ class HomeTimerPage extends StatefulWidget {
 }
 
 class _HomeTimerPageState extends State<HomeTimerPage> {
-  var timer, lat, long;
-  bool servicestatus = false;
-  late LocationPermission permission;
-  late Position position;
   late String duration;
   var title = TextEditingController();
-
-  @override
-  void initState() {
-    getLocation();
-    timer = Provider.of<TimerProvider>(context, listen: false);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +25,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
         Consumer<TimerProvider>(builder: (context, value, child) {
           return Container(
             child: Text(
-              '${timer.hour.toString().padLeft(2, "0")} : ${timer.minute.toString().padLeft(2, "0")} : ${timer.second.toString().padLeft(2, "0")}',
+              '${value.hour.toString().padLeft(2, "0")} : ${value.minute.toString().padLeft(2, "0")} : ${value.second.toString().padLeft(2, "0")}',
               style: TextStyle(color: Colors.white, fontSize: 70),
             ),
           );
@@ -58,12 +47,12 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Text(
-                            '${timer.startTimeString}',
+                            '${value.startTimeString}',
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                         Text(
-                          '${timer.startDateString}',
+                          '${value.startDateString}',
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         ),
                       ],
@@ -81,12 +70,12 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Text(
-                            '${timer.endTimeString}',
+                            '${value.endTimeString}',
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                         ),
                         Text(
-                          '${timer.endDateString}',
+                          '${value.endDateString}',
                           style: TextStyle(color: Colors.white, fontSize: 15),
                         ),
                       ],
@@ -114,9 +103,14 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
-                  child: Text(
-                    '${lat}, ${long}',
-                    style: TextStyle(color: Colors.white),
+                  child: Consumer<GeoLocator>(
+                    builder: (context, value, child) {
+                      value.getLocation();
+                      return Text(
+                        '${value.lat}, ${value.long}',
+                        style: TextStyle(color: Colors.white),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -141,7 +135,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                timer.startAvail != false
+                value.startAvail != false
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -156,14 +150,14 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   onSurface: Colors.transparent,
                                   shadowColor: Colors.transparent),
                               onPressed: () {
-                                timer.startTimer();
+                                value.startTimer();
                                 title.clear();
                               },
                               child: Text('START'),
                             )),
                       ))
                     : Container(),
-                timer.stopAvail != false
+                value.stopAvail != false
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -178,14 +172,14 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   onSurface: Colors.transparent,
                                   shadowColor: Colors.transparent),
                               onPressed: () {
-                                timer.stopTimer();
+                                value.stopTimer();
                                 title.clear();
                               },
-                              child: Text('SAVE'),
+                              child: Text('STOP'),
                             )),
                       ))
                     : Container(),
-                timer.resetAvail != false
+                value.resetAvail != false
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -200,7 +194,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   onSurface: Colors.transparent,
                                   shadowColor: Colors.transparent),
                               onPressed: () {
-                                timer.resetTimer();
+                                value.resetTimer();
                               },
                               child: Text(
                                 'RESET',
@@ -209,7 +203,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                             )),
                       ))
                     : Container(),
-                timer.saveAvail != false
+                value.saveAvail != false
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -218,21 +212,24 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                               gradient: Style.buttonColor,
                               borderRadius: BorderRadius.circular(7.5),
                             ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  primary: Colors.transparent,
-                                  onSurface: Colors.transparent,
-                                  shadowColor: Colors.transparent),
-                              onPressed: () {
-                                timer.saveCurrentTimerData(
-                                    title.text, lat, long);
-                                title.clear();
-                              },
-                              child: Text('SAVE'),
-                            )),
+                            child: Consumer<GeoLocator>(
+                                builder: (context, location, child) {
+                              return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.transparent,
+                                    onSurface: Colors.transparent,
+                                    shadowColor: Colors.transparent),
+                                onPressed: () {
+                                  value.saveCurrentTimerData(
+                                      title.text, location.lat, location.long);
+                                  title.clear();
+                                },
+                                child: Text('SAVE'),
+                              );
+                            })),
                       ))
                     : Container(),
-                timer.deleteAvail != false
+                value.deleteAvail != false
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -247,7 +244,7 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
                                   onSurface: Colors.transparent,
                                   shadowColor: Colors.transparent),
                               onPressed: () {
-                                timer.deleteCurrentTimerData();
+                                value.deleteCurrentTimerData();
                               },
                               child: Text('DELETE',
                                   style: TextStyle(color: Colors.black54)),
@@ -260,28 +257,5 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
         }),
       ])),
     );
-  }
-
-  void getLocation() async {
-    servicestatus = await Geolocator.isLocationServiceEnabled();
-    if (servicestatus) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        long = "permissions are";
-        lat = "denied";
-      } else if (permission == LocationPermission.deniedForever) {
-        long = "permissions are";
-        lat = "permanently denied";
-      } else {
-        position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        lat = position.latitude.toString();
-        long = position.longitude.toString();
-        setState(() {});
-      }
-    } else {
-      long = "no gps";
-      lat = "service";
-    }
   }
 }

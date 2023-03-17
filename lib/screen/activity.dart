@@ -20,16 +20,11 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
 
-  bool servicestatus = false;
-  late LocationPermission permission;
-  late Position position;
-
-  var length, sort, lat = "", long = "";
+  var length, sort;
   var searchKeyWord = TextEditingController();
 
   @override
   void initState() {
-    getLocation();
     super.initState();
     sort = Provider.of<SortProvider>(context, listen: false);
   }
@@ -116,39 +111,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
             ],
           ),
         ),
-        Consumer2<SortProvider, SearchProvider>(
-          builder: (context, sort, search, child) {
+        Consumer3<SortProvider, SearchProvider, GeoLocator>(
+          builder: (context, sort, search, location, child) {
+            location.getLocation();
             activities = Boxes.getAllActivityValue(search.values);
             return Expanded(
-              child: SortProvider()
-                  .sortActivity(activities, sort.value, lat, long),
+              child: SortProvider().sortActivity(
+                  activities, sort.value, location.lat, location.long),
             );
           },
         ),
       ])),
     );
-  }
-
-  void getLocation() async {
-    servicestatus = await Geolocator.isLocationServiceEnabled();
-    if (servicestatus) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        long = "permissions are";
-        lat = "denied";
-      } else if (permission == LocationPermission.deniedForever) {
-        long = "permissions are";
-        lat = "permanently denied";
-      } else {
-        position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high);
-        lat = position.latitude.toString();
-        long = position.longitude.toString();
-        setState(() {});
-      }
-    } else {
-      long = "no gps";
-      lat = "service";
-    }
   }
 }
