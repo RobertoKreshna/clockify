@@ -6,7 +6,7 @@ import '../model/activity.dart';
 import '../model/boxes.dart';
 import '../screen/activity_detail.dart';
 import '../style/styles.dart';
-import '../utils/geolocation.dart';
+import 'location_provider.dart';
 
 class SortProvider extends ChangeNotifier {
   late var _value = "Latest Date";

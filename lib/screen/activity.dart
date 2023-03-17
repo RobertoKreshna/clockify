@@ -2,7 +2,7 @@ import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/provider/search_provider.dart';
 import 'package:clocklify/provider/sort_provider.dart';
 import 'package:clocklify/screen/home_timer.dart';
-import 'package:clocklify/utils/geolocation.dart';
+import 'package:clocklify/provider/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';

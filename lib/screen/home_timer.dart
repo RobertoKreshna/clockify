@@ -1,7 +1,7 @@
 import 'package:clocklify/model/timer.dart';
 import 'package:clocklify/screen/activity.dart';
 import 'package:clocklify/style/styles.dart';
-import 'package:clocklify/utils/geolocation.dart';
+import 'package:clocklify/provider/location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:geolocator/geolocator.dart';
