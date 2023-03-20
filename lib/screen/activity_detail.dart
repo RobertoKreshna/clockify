@@ -53,10 +53,8 @@ class ActivityDetail extends StatelessWidget {
             Spacer(
               flex: 3,
             ),
-            Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Component.StartEndActivity(activity.startTime,
-                    activity.startDate, activity.endTime, activity.endDate)),
+            Component.StartEndActivity(activity.startTime, activity.startDate,
+                activity.endTime, activity.endDate),
             Component.LocationBox(
               Text(
                 '${activity.lat}, ${activity.long}',

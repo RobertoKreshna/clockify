@@ -95,55 +95,58 @@ class Component {
 
   static Widget StartEndActivity(
       String startTime, String startDate, String endTime, String endDate) {
-    return Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: Column(
-              children: [
-                Text(
-                  'Start Time',
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Text(
-                    startTime,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    'Start Time',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
-                ),
-                Text(
-                  startDate,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: Text(
+                      startTime,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ),
+                  Text(
+                    startDate,
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Expanded(
-          child: Center(
-            child: Column(
-              children: [
-                Text(
-                  'End Time',
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Text(
-                    endTime,
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+          Expanded(
+            child: Center(
+              child: Column(
+                children: [
+                  Text(
+                    'End Time',
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
-                ),
-                Text(
-                  endDate,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                    child: Text(
+                      endTime,
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                  ),
+                  Text(
+                    endDate,
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

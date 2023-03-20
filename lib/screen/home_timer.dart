@@ -33,13 +33,8 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
         }),
         Spacer(),
         Consumer<TimerProvider>(builder: (context, value, child) {
-          return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: Component.StartEndActivity(
-                  value.startTimeString,
-                  value.startDateString,
-                  value.endTimeString,
-                  value.endDateString));
+          return Component.StartEndActivity(value.startTimeString,
+              value.startDateString, value.endTimeString, value.endDateString);
         }),
         Component.LocationBox(
           Consumer<GeoLocator>(
