@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:clocklify/model/activity.dart';
-import 'package:clocklify/provider/boxes.dart';
 import 'package:clocklify/utils/date.dart';
 import 'package:flutter/foundation.dart';
+
+import '../model/boxes.dart';
 
 class TimerProvider extends ChangeNotifier {
   late Timer _timer;
