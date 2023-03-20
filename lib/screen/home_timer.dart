@@ -20,74 +20,75 @@ class _HomeTimerPageState extends State<HomeTimerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Style.bgColor,
-      body: SafeArea(
-          child: Column(children: [
-        Spacer(),
-        Consumer<TimerProvider>(builder: (context, value, child) {
-          return Container(
-            child: Text(
-              '${value.hour.toString().padLeft(2, "0")} : ${value.minute.toString().padLeft(2, "0")} : ${value.second.toString().padLeft(2, "0")}',
-              style: TextStyle(color: Colors.white, fontSize: 70),
+      body: SafeArea(child: Consumer<TimerProvider>(
+        builder: (context, timer, child) {
+          return Column(children: [
+            Spacer(),
+            Container(
+              child: Text(
+                '${timer.hour.toString().padLeft(2, "0")} : ${timer.minute.toString().padLeft(2, "0")} : ${timer.second.toString().padLeft(2, "0")}',
+                style: TextStyle(color: Colors.white, fontSize: 70),
+              ),
             ),
-          );
-        }),
-        Spacer(),
-        Consumer<TimerProvider>(builder: (context, value, child) {
-          return Component.StartEndActivity(value.startTimeString,
-              value.startDateString, value.endTimeString, value.endDateString);
-        }),
-        Component.LocationBox(
-          Consumer<GeoLocator>(
-            builder: (context, value, child) {
-              value.getLocation();
-              return Text(
-                '${value.lat}, ${value.long}',
-                style: TextStyle(color: Colors.white),
-              );
-            },
-          ),
-        ),
-        Component.ActivityTitleBox(title),
-        Consumer<TimerProvider>(builder: (context, value, child) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-              children: [
-                value.startAvail != false
-                    ? Component.blueButton('START', () {
-                        value.startTimer();
-                      })
-                    : Container(),
-                value.stopAvail != false
-                    ? Component.blueButton('STOP', () {
-                        value.stopTimer();
-                      })
-                    : Container(),
-                value.resetAvail != false
-                    ? Component.greyButton('RESET', () {
-                        value.resetTimer();
-                        title.clear();
-                      })
-                    : Container(),
-                value.saveAvail != false
-                    ? Consumer<GeoLocator>(builder: (context, location, child) {
-                        return Component.blueButton('SAVE', () {
-                          value.saveCurrentTimerData(
-                              title.text, location.lat, location.long);
+            Spacer(),
+            Component.StartEndActivity(
+                timer.startTimeString,
+                timer.startDateString,
+                timer.endTimeString,
+                timer.endDateString),
+            Component.LocationBox(
+              Consumer<GeoLocator>(
+                builder: (context, location, child) {
+                  location.getLocation();
+                  return Text(
+                    '${location.lat}, ${location.long}',
+                    style: TextStyle(color: Colors.white),
+                  );
+                },
+              ),
+            ),
+            Component.ActivityTitleBox(title),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                children: [
+                  timer.startAvail != false
+                      ? Component.blueButton('START', () {
+                          timer.startTimer();
+                        })
+                      : Container(),
+                  timer.stopAvail != false
+                      ? Component.blueButton('STOP', () {
+                          timer.stopTimer();
+                        })
+                      : Container(),
+                  timer.resetAvail != false
+                      ? Component.greyButton('RESET', () {
+                          timer.resetTimer();
                           title.clear();
-                        });
-                      })
-                    : Container(),
-                value.deleteAvail != false
-                    ? Component.greyButton('DELETE', () {
-                        value.deleteCurrentTimerData();
-                      })
-                    : Container(),
-              ],
+                        })
+                      : Container(),
+                  timer.saveAvail != false
+                      ? Consumer<GeoLocator>(
+                          builder: (context, location, child) {
+                          return Component.blueButton('SAVE', () {
+                            timer.saveCurrentTimerData(
+                                title.text, location.lat, location.long);
+                            title.clear();
+                          });
+                        })
+                      : Container(),
+                  timer.deleteAvail != false
+                      ? Component.greyButton('DELETE', () {
+                          timer.deleteCurrentTimerData();
+                        })
+                      : Container(),
+                ],
+              ),
             ),
-          );
-        }),
-      ])),
+          ]);
+        },
+      )),
     );
   }
 }
