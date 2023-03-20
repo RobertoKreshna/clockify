@@ -20,7 +20,7 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   late List<Activity> activities = [];
 
-  var length, sort;
+  var sort;
   var searchKeyWord = TextEditingController();
 
   @override
