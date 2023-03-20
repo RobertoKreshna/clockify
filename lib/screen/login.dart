@@ -1,4 +1,5 @@
 import 'package:clocklify/screen/create_account.dart';
+import 'package:clocklify/utils/component.dart';
 import 'package:flutter/material.dart';
 import '../style/styles.dart';
 import 'password_input.dart';
@@ -46,27 +47,13 @@ class LoginPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Expanded(
-                          child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                gradient: Style.buttonColor,
-                                borderRadius: BorderRadius.circular(7.5),
-                              ),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    primary: Colors.transparent,
-                                    onSurface: Colors.transparent,
-                                    shadowColor: Colors.transparent),
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              PasswordInputPage(
-                                                  _emailController.text)));
-                                },
-                                child: Text('SIGN IN'),
-                              )))
+                      Component.blueButton("SIGN IN", () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    PasswordInputPage(_emailController.text)));
+                      })
                     ],
                   ),
                   TextButton(

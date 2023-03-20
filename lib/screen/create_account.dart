@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:clocklify/model/boxes.dart';
 import 'package:clocklify/model/user.dart';
 import 'package:clocklify/screen/mainpage_bar.dart';
+import 'package:clocklify/utils/component.dart';
 import 'package:flutter/material.dart';
 import 'home_timer.dart';
 import 'login.dart';
@@ -118,46 +119,32 @@ class _CreateAccountPage extends State<CreateAccountPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                Expanded(
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: Style.buttonColor,
-                          borderRadius: BorderRadius.circular(7.5),
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              onSurface: Colors.transparent,
-                              shadowColor: Colors.transparent),
-                          onPressed: () {
-                            //cek add
-                            bool addResult = addUser(
-                                _emailController.text,
-                                _passwordController.text,
-                                _confirmPasswordController.text);
-                            //kalau gagal
-                            if (!addResult) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          LoginPage()));
-                            } else {
-                              //kalau berhasil
-                              showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          _buildSuccessPopUp())
-                                  // .then((value) => Navigator.pop(context));
-                                  .then((value) => Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              MainPageBar())));
-                            }
-                          },
-                          child: Text('CREATE'),
-                        )))
+                Component.blueButton('CREATE', () {
+                  //cek add
+                  bool addResult = addUser(
+                      _emailController.text,
+                      _passwordController.text,
+                      _confirmPasswordController.text);
+                  //kalau gagal
+                  if (!addResult) {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => LoginPage()));
+                  } else {
+                    //kalau berhasil
+                    showDialog(
+                            context: context,
+                            builder: (BuildContext context) =>
+                                _buildSuccessPopUp())
+                        // .then((value) => Navigator.pop(context));
+                        .then((value) => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MainPageBar())));
+                  }
+                })
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:clocklify/screen/mainpage_bar.dart';
+import 'package:clocklify/utils/component.dart';
 import 'package:flutter/material.dart';
 import '../model/boxes.dart';
 import '../model/user.dart';
@@ -79,33 +80,18 @@ class _PasswordInputPageState extends State<PasswordInputPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Row(
               children: [
-                Expanded(
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: Style.buttonColor,
-                          borderRadius: BorderRadius.circular(7.5),
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              onSurface: Colors.transparent,
-                              shadowColor: Colors.transparent),
-                          onPressed: () {
-                            if (checkLoginCredentials(
-                                _email, _passwordController)) {
-                              // kalau berhasil
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) =>
-                                          MainPageBar()));
-                            } else {
-                              // kalau gagal
-                              Navigator.pop(context);
-                            }
-                          },
-                          child: Text('OK'),
-                        )))
+                Component.blueButton('OK', () {
+                  if (checkLoginCredentials(_email, _passwordController)) {
+                    // kalau berhasil
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => MainPageBar()));
+                  } else {
+                    // kalau gagal
+                    Navigator.pop(context);
+                  }
+                })
               ],
             ),
           ),
