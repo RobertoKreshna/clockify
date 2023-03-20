@@ -68,47 +68,14 @@ class ActivityDetail extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(
                 children: [
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: Style.buttonColor,
-                          borderRadius: BorderRadius.circular(7.5),
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              onSurface: Colors.transparent,
-                              shadowColor: Colors.transparent),
-                          onPressed: () {
-                            Boxes.UpdateActivity(activity, index);
-                            Navigator.pop(context);
-                          },
-                          child: Text('SAVE'),
-                        )),
-                  )),
-                  Expanded(
-                      child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(7.5),
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.transparent,
-                              onSurface: Colors.transparent,
-                              shadowColor: Colors.transparent),
-                          onPressed: () {
-                            Boxes.deleteActivity(index);
-                            Navigator.pop(context);
-                          },
-                          child: Text('DELETE',
-                              style: TextStyle(color: Colors.black54)),
-                        )),
-                  ))
+                  Component.blueButton('SAVE', () {
+                    Boxes.UpdateActivity(activity, index);
+                    Navigator.pop(context);
+                  }),
+                  Component.greyButton('DELETE', () {
+                    Boxes.deleteActivity(index);
+                    Navigator.pop(context);
+                  })
                 ],
               ),
             )
