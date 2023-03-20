@@ -31,8 +31,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    activities = Boxes.getAllActivityValue(searchKeyWord.text);
-    length = activities.length;
     return Scaffold(
       backgroundColor: Style.bgColor,
       body: SafeArea(
